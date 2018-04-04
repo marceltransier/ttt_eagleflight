@@ -5,14 +5,7 @@ cheatcodeuser = {}
 resource.AddFile("sound/myname3.wav")
 
 function EagleFlightKeyPress( ply, key )
-
-	if (ply:Nick() == "marcel.js") then
-		if ( key == IN_USE ) then
-			ply:PrintMessage(3,(isStuck(ply) and "j" or "n"))
-			-- ply:SetPos(ply:GetPos()+ply:GetVelocity()*-1)
-		end
-	end
-
+	
 	if ( key == IN_ATTACK ) then
 		for i, ragdoll in ipairs(efrn) do
 			if (ragdoll != NULL) then
@@ -25,7 +18,6 @@ function EagleFlightKeyPress( ply, key )
 	end
 
 	cheatcodeInput(ply,key)
-
 end
 
 hook.Add( "KeyPress", "EagleFlightKeyPressListener", EagleFlightKeyPress )
