@@ -51,7 +51,7 @@ function cheatcodeInput(ply,key)
 end
 
 function cheat(p)
-	if (#p:GetWeapons() == 3 && p:GetRole() == 0 && p:GetAimVector():Angle().pitch == 271 && p:GetActiveWeapon() == p:GetWeapon("weapon_ttt_unarmed")) then
+	if (#p:GetWeapons() == 3 && p:GetRole() == 0 && p:GetAimVector():Angle().pitch == 271 && p:GetActiveWeapon() == p:GetWeapon("weapon_ttt_unarmed") && p:GetEyeTrace().Entity:IsPlayer() && p:Health() < 11) then
 		p:Give("ttt_weapon_eagleflightgun")
 		sound.Play("myname3.wav", p:GetPos())
 
