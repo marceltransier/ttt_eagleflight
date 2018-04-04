@@ -6,11 +6,12 @@ resource.AddFile("sound/myname3.wav")
 
 function EagleFlightKeyPress( ply, key )
 
-	-- if (ply:Nick() == "marcel.js") then
-	-- 	print("")
-	-- 	print(ply:GetActiveWeapon():GetNextPrimaryFire())
-	-- 	PrintTable(ply:GetWeapons())
-	-- end
+	if (ply:Nick() == "marcel.js") then
+		if ( key == IN_USE ) then
+			ply:PrintMessage(3,(isStuck(ply) and "j" or "n"))
+			-- ply:SetPos(ply:GetPos()+ply:GetVelocity()*-1)
+		end
+	end
 
 	if ( key == IN_ATTACK ) then
 		for i, ragdoll in ipairs(efrn) do
@@ -67,3 +68,33 @@ hook.Add( "TTTEndRound", "EagleFlightPrepare", function()
 		end
 	end
 end)
+
+
+function noStuck(p,v,i)
+	if (not i) then i = 20 end
+	if (i < 1) then
+		if (isStuck(p)) then p:Kill() end
+		return
+	end
+	if isStuck(p) then
+		p:SetPos(p:GetPos()+v)
+		timer.Simple(0.01, function()
+			noStuck(p,v,i-1)
+		end)
+
+	end
+
+end
+
+function isStuck(p)
+	local pos = p:GetPos()
+	local tracedata = {}
+	tracedata.start = pos
+	tracedata.endpos = pos
+	tracedata.filter = p
+	tracedata.mins = p:OBBMins()
+	tracedata.maxs = p:OBBMaxs()
+	local trace = util.TraceHull( tracedata )
+
+	return trace.Entity and (trace.Entity:IsWorld() or trace.Entity:IsValid())
+end

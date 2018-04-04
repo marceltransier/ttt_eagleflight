@@ -50,6 +50,9 @@ function SWEP:PrimaryAttack()
 	p:StripWeapon( "ttt_weapon_eagleflightgun" )
 
 	local ragdoll = ents.Create( "prop_ragdoll" )
+
+	ragdoll.vel = p:GetAimVector()*-50
+
 	ragdoll:SetSolid(SOLID_VPHYSICS)
 	ragdoll:PhysicsInit( SOLID_VPHYSICS )
 
@@ -85,6 +88,8 @@ function SWEP:PrimaryAttack()
 
 	ragdoll.explode = function()
 
+		--ragdoll.vel = ragdoll:GetVelocity()--:GetNormalized()
+
 		local p = ragdoll.Owner
 		local pos = ragdoll:GetPos()
 		local ent = ents.Create( "env_explosion" )
@@ -100,13 +105,16 @@ function SWEP:PrimaryAttack()
 
 		p:SetPos(pos)
 		ragdoll:unragdoll()
-		ragdoll:Remove()
+		--ragdoll:Remove()
 		p:SetHealth(ragdoll.hp)
 		p:SetCredits(ragdoll.c)
 	end
 
 
 	ragdoll.unragdoll = function()
+
+		local stepback = ragdoll.vel
+
 		local p = ragdoll.Owner
 		p:SetParent()
 		p.ragdoll = nil
@@ -115,6 +123,13 @@ function SWEP:PrimaryAttack()
 		p:SetPos( pos )
 		local yaw = ragdoll:GetAngles().yaw
 		p:SetAngles( Angle( 0, yaw, 0 ) )
+
+		timer.Simple( 0.01, function()
+			noStuck(p,stepback)
+		end )
+
+
+
 		ragdoll:DisallowDeleting( false )
 		ragdoll:Remove()
 	end
