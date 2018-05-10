@@ -78,9 +78,11 @@ function SWEP:PrimaryAttack()
 	p:Spectate( OBS_MODE_CHASE )
 	p:SpectateEntity( ragdoll )
 	p.ragdoll = ragdoll
-	ragdoll:DisallowDeleting( true, function( old, new )
-		if p:IsValid() then p.ragdoll = new end
-	end )
+	if ragdoll:DissllowDeleting~=nil then
+		ragdoll:DisallowDeleting( true, function( old, new )
+			if p:IsValid() then p.ragdoll = new end
+		end )
+	end
 
 	ragdoll.hp = p:Health()
 	ragdoll.c = p:GetCredits()
@@ -130,7 +132,7 @@ function SWEP:PrimaryAttack()
 
 
 
-		ragdoll:DisallowDeleting( false )
+		if ragdoll:DisallowDeleting~=nil then ragdoll:DisallowDeleting( false ) end
 		ragdoll:Remove()
 	end
 
